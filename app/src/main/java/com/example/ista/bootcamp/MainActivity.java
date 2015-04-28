@@ -10,20 +10,28 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.os.Build;
+import android.widget.ArrayAdapter;
 import android.widget.ListView;
+
+import com.example.ista.bootcamp.model.Aufgabe;
+
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 
 import roboguice.activity.RoboActivity;
 import roboguice.inject.ContentView;
 import roboguice.inject.InjectView;
 
-public class MainActivity extends Activity {
+@ContentView(R.layout.activity_main)
+public class MainActivity extends RoboActivity {
 
+    @InjectView(R.id.augabenListe)
     private ListView aufgabenListe;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
 
         if (savedInstanceState == null) {
             getFragmentManager().beginTransaction()
@@ -31,7 +39,18 @@ public class MainActivity extends Activity {
                     .commit();
         }
 
-        aufgabenListe = (ListView) findViewById(R.id.augabenListe);
+        initData();
+    }
+
+    private void initData() {
+
+        List<Aufgabe> items = new ArrayList<Aufgabe>();
+        for (int i = 1; i < 20; i++) {
+            items.add(new Aufgabe(i));
+        }
+        ArrayAdapter<Aufgabe> aufgaben = new ArrayAdapter<Aufgabe>(this, R.layout.aufgaben_item, items);
+
+        aufgabenListe.setAdapter(aufgaben);
     }
 
 
